@@ -1,6 +1,6 @@
 import tkinter as tk
 
-wordspossible = open("words.txt", "r")
+wordspossible = open("wordsweight.txt", "r")
 possiblewords = open("possiblewords.txt", "a")
 notletters = ""
 posletters = ["", "", "", "", ""]
@@ -33,7 +33,7 @@ def gui():
     lettersout.place(x = 10, y = 500)
 
     def submit():
-        wordspossible = open("words.txt", "r")
+        wordspossible = open("wordsweight.txt", "r")
         possiblewords = open("possiblewords.txt", "a")
         baibai = open("possiblewords.txt", "w")
         baibai.close
@@ -44,13 +44,11 @@ def gui():
         letters = lettersin.get("1.0", "end-1c")
         notletters = lettersout.get("1.0", "end-1c")
 
-        notentries = [notentry1, notentry2, notentry3, notentry4, notentry5]
         no1 = notentry1.get("1.0", "end-1c")
         no2 = notentry2.get("1.0", "end-1c")
         no3 = notentry3.get("1.0", "end-1c")
         no4 = notentry4.get("1.0", "end-1c")
         no5 = notentry5.get("1.0", "end-1c")
-
 
         for i in range(5):
             posletters[i] = entries[i].get("1.0","end-1c")
@@ -84,10 +82,41 @@ def gui():
                         else:
                             possiblewords.write(''.join(i))
         possiblewords.close()
-        wtg = open("possiblewords.txt", "r")
-        answer1 = wtg.readline()
-        answer2 = wtg.readline()
-        answer3 = wtg.readline()
+
+        wordsread = open("possiblewords.txt", "r")
+        wordsread =  wordsread.read().splitlines()
+        filewrite = open("possiblewordsweight.txt", "w")
+        
+        weightletters = ["j" ,"q" ,"x" ,"z" ,"v" ,"w" ,"k" ,"f" ,"b" ,"g" ,"m" ,"p" ,"h" ,"d" ,"y" ,"u" ,"c" ,"n" ,"s" ,"i" ,"l" ,"t" ,"o" ,"r" ,"a" ,"e"]
+
+        wordweights = []
+        words = []
+
+        for i in wordsread:
+            letteri = [weightletters.index(char) for char in i]
+            letteri2 = []
+            for j in letteri:
+                if(not j in letteri2):
+                    letteri2.append(j)
+            weighti = sum(letteri2)
+            wordweights.append([weighti, i])
+
+        wordweights.sort(reverse = True)
+
+        for j in wordweights:
+            words.append(j[1])
+
+        for i in words:
+            filewrite.write(i + "\n")
+
+        filewrite.close()
+
+        
+        wordstoget = open("possiblewordsweight.txt")
+
+        answer1 = wordstoget.readline()
+        answer2 = wordstoget.readline()
+        answer3 = wordstoget.readline()
         label1 = tk.Label(text=answer1, wraplength = 300,font=('courier',12,'normal'), bg = "#1f1c1d", fg = "white")
         label2 = tk.Label(text=answer2, wraplength = 300,font=('courier',12,'normal'), bg = "#1f1c1d", fg = "white")
         label3 = tk.Label(text=answer3, wraplength = 300,font=('courier',12,'normal'), bg = "#1f1c1d", fg = "white")
